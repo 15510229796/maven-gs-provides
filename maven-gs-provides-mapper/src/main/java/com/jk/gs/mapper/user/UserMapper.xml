@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+	namespace：必须与对应的接口全类名一致
+	id:必须与对应接口的某个对应的方法名一致
+ -->
+
+<mapper namespace="com.jk.gs.mapper.user.UserMapper">
+	<!-- 查询角色信息-->
+ <select id="getRole" resultType="com.jk.gs.model.user.RoleBean">
+	 SELECT id,rname,uid,newtime,remark FROM g_role
+ </select>
+ <select id="getPowerById" parameterType="Integer" resultType="com.jk.gs.model.user.RoleTree">
+	 SELECT id,rid,tid FROM g_role_tree WHERE rid=#{rid}
+ </select>
+	<!-- 查询树信息 -->
+ <select id="getZtree" resultType="com.jk.gs.model.user.TreeBean">
+	 SELECT id,name,url,pid FROM g_tree
+ </select>
+	<!-- 新增角色信息-->
+ <insert id="addRole"	parameterType="com.jk.gs.model.user.RoleBean">
+  insert into g_role(rname,remark) values (#{rname},#{remark});
+ </insert>
+	<!-- 修改角色信息 -->
+ <update id="updRole" parameterType="com.jk.gs.model.user.RoleBean">
+	 UPDATE g_role SET rname=#{rname},remark=#{remark},newtime=#{newtime} WHERE id=#{id}
+ </update>
+	<!-- 删除角色信息 -->
+ <delete id="delRole"	parameterType="String">
+	 DELETE FROM g_role WHERE id IN (${ids})
+ </delete>
+	<!-- 删除权限 -->
+ <delete id="delRoleTree" parameterType="Integer">
+		DELETE FROM g_role_tree WHERE rid=#{id}
+ </delete>
+	<!-- 新增权限 -->
+ <insert id="addRoleTree"  parameterType="list">
+	INSERT INTO g_role_tree(rid,tid) VALUES
+	<foreach collection="list" item="a" index="index"  separator=",">
+		(#{a.rid},#{a.tid})
+	</foreach>
+ </insert>
+	<!-- 查询详细菜单 -->
+ <select id="getPower" resultType="com.jk.gs.model.user.Power" parameterType="Integer">
+	 SELECT id,text,url,tid,remark FROM g_power WHERE tid=#{id}
+ </select>
+	<!-- 新增详细菜单 -->
+ <insert id="addMenu"	parameterType="com.jk.gs.model.user.Power">
+         INSERT INTO g_power(text,url,tid,remark)
+		 VALUES (#{text},#{url},#{tid},#{remark})
+ </insert>
+	<!-- 删除详细菜单 -->
+ <delete id="delMenu" parameterType="Integer">
+	DELETE FROM g_power WHERE id=#{id}
+ </delete>
+	<!-- 修改详细菜单 -->
+ <update id="updMenu" parameterType="com.jk.gs.model.user.Power">
+	UPDATE g_power SET
+	text=#{text},
+	url=#{url},
+	remark=#{remark}
+	WHERE id=#{id}
+ </update>
+	<!-- 新增树 -->
+ <insert id="addTree" parameterType="com.jk.gs.model.user.TreeBean">
+	INSERT  INTO g_tree(name,url,pid)
+	VALUES (#{name},#{url},#{pid})
+ </insert>
+	<!-- 删除树 -->
+ <delete id="delTree" parameterType="Integer">
+	DELETE FROM g_tree WHERE id=#{id}
+ </delete>
+	<!-- 修改树 -->
+ <update id="updTree" parameterType="com.jk.gs.model.user.TreeBean">
+	UPDATE g_tree SET
+	name=#{name},
+	url=#{url},
+	remark=#{remark}
+	WHERE id=#{id}
+ </update>
+
+	<select id="getTreees" parameterType="Integer">
+		SELECT * FROM g_tree WHERE id=#{id}
+	</select>
+
+    <select id="getFileList" resultType="com.jk.gs.model.user.Resources">
+        SELECT id,name,type,path,time FROM g_resources WHERE userId=#{userId} AND pid=#{id}
+    </select>
+
+    <insert id="uploadPhotoFiles" parameterType="list">
+        INSERT INTO g_resources(name,userId,type,path,time,pid) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.name},#{item.userId},#{item.type},#{item.path},#{item.time},#{item.pid})
+        </foreach>
+    </insert>
+
+    <select id="getFileLista" parameterType="map" resultType="map" >
+        SELECT concat(name,".",type) as name,path FROM g_resources t
+        WHERE t.userId = #{userid}
+        and t.id in (${id})
+    </select>
+
+    <select id="getFileTypeById" parameterType="String" resultType="com.jk.gs.model.user.Resources">
+        SELECT r.id ,r.type ,r.pid FROM g_resources r where r.id in (${idss})
+    </select>
+
+    <select id="getFileTypeByPid" parameterType="String" resultType="com.jk.gs.model.user.Resources">
+        SELECT r.id ,r.type , r.pid FROM g_resources r where r.pid in (${idn})
+    </select>
+
+    <insert id="addFolder" parameterType="com.jk.gs.model.user.Resources">
+        INSERT INTO g_resources(name,userId,pid,time) VALUES
+        (#{name},#{userId},#{pid},#{time})
+    </insert>
+
+    <select id="getLog" resultType="com.jk.gs.model.user.Log">
+        SELECT id,newDate,username,ips,address,flag FROM g_log
+    </select>
+
+    <select id="getLogByPage" resultType="com.jk.gs.model.user.Log">
+        SELECT id,newDate,username,ips,address,flag FROM g_log LIMIT #{page},#{rows}
+    </select>
+
+    <select id="getNotice" resultType="com.jk.gs.model.user.Notice">
+        SELECT id,title,content,time FROM g_notice
+    </select>
+
+    <select id="getNoticeByPage" resultType="com.jk.gs.model.user.Notice">
+        SELECT id,title,content,time FROM g_notice LIMIT #{page},#{rows}
+    </select>
+
+    <insert id="addNotice" parameterType="com.jk.gs.model.user.Notice">
+        INSERT  INTO g_notice(title,content,time) VALUES
+        (#{title},#{content},#{time})
+    </insert>
+
+    <select id="getClientele" resultType="com.jk.gs.model.user.Clientele">
+        SELECT * FROM g_clientele
+    </select>
+
+    <select id="getClienteleByPage" resultType="com.jk.gs.model.user.Clientele">
+        SELECT * FROM g_clientele LIMIT #{page},#{rows}
+    </select>
+
+    <insert id="addClientele" parameterType="com.jk.gs.model.user.Clientele">
+        INSERT INTO g_clientele(clienteleName,clienteleSex,clienteleAge,clienteleID,clientelePhone,clienteleNumber,clientelePassword,clienteleAdress,emergencyContact,emergencyContactPhone) VALUES
+        (#{clienteleName},#{clienteleSex},#{clienteleAge},#{clienteleID},#{clientelePhone},#{clienteleNumber},#{clientelePassword},#{clienteleAdress},#{emergencyContact},#{emergencyContactPhone})
+    </insert>
+
+    <update id="updClientele" parameterType="com.jk.gs.model.user.Clientele">
+        UPDATE g_clientele SET
+        clienteleName=#{clienteleName},
+        clienteleSex=#{clienteleSex},
+        clienteleAge=#{clienteleAge},
+        clienteleID=#{clienteleID},
+        clientelePhone=#{clientelePhone},
+        clienteleNumber=#{clienteleNumber},
+        clientelePassword=#{clientelePassword},
+        clienteleAdress=#{clienteleAdress},
+        emergencyContact=#{emergencyContact},
+        emergencyContactPhone=#{emergencyContactPhone}
+        WHERE id=#{id}
+    </update>
+
+    <delete id="delClientele">
+        DELETE FROM g_clientele WHERE id in(${ids})
+    </delete>
+
+    <select id="getRental" resultType="com.jk.gs.model.user.Rental">
+        SELECT * FROM g_rental WHERE 1=1
+        <if test="rental.priceMin!=null and rental.priceMin!=''">
+            and price&gt;= #{rental.priceMin}
+        </if>
+        <if test="rental.priceMax!=null and rental.priceMax!=''">
+            and price &lt;= #{rental.priceMax}
+        </if>
+    </select>
+
+    <select id="getRentals" resultType="com.jk.gs.model.user.Rental">
+        SELECT * FROM g_rental WHERE 1=1
+        <if test="rental.priceMin!=null and rental.priceMin!=''">
+            and price&gt;= #{rental.priceMin}
+        </if>
+        <if test="rental.priceMax!=null and rental.priceMax!=''">
+            and price &lt;= #{rental.priceMax}
+        </if>
+        <if test="rental.type!=null">
+            AND type=#{rental.type}
+        </if>
+    </select>
+
+    <insert id="addRental" parameterType="com.jk.gs.model.user.Rental">
+        INSERT INTO g_rental(id,cid,publisher,homeAddress,price,type,promotion,homeDescribe)
+        VALUES (#{id},#{cid},#{publisher},#{homeAddress},#{price},#{type},#{promotion},#{homeDescribe})
+    </insert>
+
+    <select id="getRentalByPage" resultType="com.jk.gs.model.user.Rental">
+        SELECT * FROM g_rental
+        WHERE 1=1
+        <if test="rental.priceMin!=null and rental.priceMin!=''">
+            and price&gt;= #{rental.priceMin}
+        </if>
+        <if test="rental.priceMax!=null and rental.priceMax!=''">
+            and price &lt;= #{rental.priceMax}
+        </if>
+        limit #{page},#{rows}
+    </select>
+
+    <select id="getEmail" resultType="com.jk.gs.model.user.Clientele">
+        SELECT * FROM g_clientele
+    </select>
+
+    <select id="getRentalByPages" resultType="com.jk.gs.model.user.Rental">
+        SELECT * FROM g_rental
+        WHERE 1=1
+        <if test="rental.priceMin!=null and rental.priceMin!=''">
+            and price &gt;= #{rental.priceMin}
+        </if>
+        <if test="rental.priceMax!=null and rental.priceMax!=''">
+            and price &lt;= #{rental.priceMax}
+        </if>
+        <if test="rental.type!=null">
+            AND type=#{rental.type}
+        </if>
+        limit #{page},#{rows}
+    </select>
+
+    <select id="getRentalByClientele" resultType="com.jk.gs.model.user.Rental">
+        SELECT * FROM g_rental WHERE cid=#{id}
+        limit #{page},#{rows}
+    </select>
+
+    <insert id="uploadPhotoFile" parameterType="list">
+        INSERT INTO g_photo(name,hid,type,url,path) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.name},#{item.hid},#{item.type},#{item.url},#{item.path})
+        </foreach>
+    </insert>
+
+    <select id="getPhotos" parameterType="String" resultType="com.jk.gs.model.user.Photos">
+        SELECT id,name,hid,type,url,path FROM g_photo WHERE hid=#{hid}
+    </select>
+    <!-- 删除角色信息 -->
+    <delete id="delRental"	parameterType="String">
+        DELETE FROM g_rental WHERE id IN (#{ids})
+    </delete>
+
+    <update id="updRental" parameterType="com.jk.gs.model.user.Rental">
+        UPDATE g_rental SET
+        publisher=#{publisher},
+        homeAddress=#{homeAddress},
+        price=#{price},
+        type=#{type},
+        promotion=#{promotion},
+        homeDescribe=#{homeDescribe}
+        WHERE id=#{id}
+    </update>
+</mapper>

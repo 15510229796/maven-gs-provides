@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+	namespace：必须与对应的接口全类名一致
+	id:必须与对应接口的某个对应的方法名一致
+ -->
+
+<mapper namespace="com.jk.gs.mapper.test.TestMapper">
+	<select id="getCount" resultType="Integer">
+      SELECT COUNT(1) from test
+	</select>
+	<select id="getZtree" parameterType="Integer" resultType="com.jk.gs.model.user.TreeBean">
+     SELECT * FROM g_tree tr
+		LEFT JOIN g_role_tree rt ON tr.id=rt.tid
+		LEFT JOIN g_role rl ON rt.rid=rl.id
+		LEFT JOIN g_user_role ur ON rl.id=ur.rid
+		WHERE ur.uid=#{cid}
+	</select>
+</mapper>

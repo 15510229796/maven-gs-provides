@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/maven-gs-provides.iml" filepath="$PROJECT_DIR$/maven-gs-provides.iml" />
+      <module fileurl="file://$PROJECT_DIR$/maven-gs-provides-mapper/maven-gs-provides-mapper.iml" filepath="$PROJECT_DIR$/maven-gs-provides-mapper/maven-gs-provides-mapper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/maven-gs-provides-model/maven-gs-provides-model.iml" filepath="$PROJECT_DIR$/maven-gs-provides-model/maven-gs-provides-model.iml" />
+      <module fileurl="file://$PROJECT_DIR$/maven-gs-provides-service/maven-gs-provides-service.iml" filepath="$PROJECT_DIR$/maven-gs-provides-service/maven-gs-provides-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/maven-gs-provides-utils/maven-gs-provides-utils.iml" filepath="$PROJECT_DIR$/maven-gs-provides-utils/maven-gs-provides-utils.iml" />
+    </modules>
+  </component>
+</project>

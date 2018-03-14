@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="maven-gs-provides-service:war">
+    <output-path>$PROJECT_DIR$/maven-gs-provides-service/target</output-path>
+    <root id="archive" name="maven-gs-provides-service.war">
+      <element id="artifact" artifact-name="maven-gs-provides-service:war exploded" />
+    </root>
+  </artifact>
+</component>
